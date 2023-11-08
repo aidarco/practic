@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:practic/models/problem_model.dart';
 import 'package:practic/services/firebase_auth_services.dart';
 
 class AddProblem extends StatefulWidget {
@@ -64,11 +63,11 @@ class _AddProblemState extends State<AddProblem> {
               TextButton(
                   onPressed: () {
                     FireBaseAuthServices().createData(
-                        model: ProblemModel(
+
                             client: controller1.text,
                             description: controller2.text,
                             problem: controller3.text,
-                            type: controller4.text));
+                            type: controller4.text);
                     Navigator.pop(context);
                   },
                   child: Text(

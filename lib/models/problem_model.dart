@@ -1,12 +1,15 @@
 class ProblemModel {
+
+  String? id;
   String? client;
   String? description;
   String? problem;
   String? type;
 
-  ProblemModel({this.client, this.description, this.problem, this.type});
+  ProblemModel({required this.id ,this.client, this.description, this.problem, this.type});
 
   ProblemModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     client = json['client'];
     description = json['description'];
     problem = json['problem'];
@@ -15,6 +18,7 @@ class ProblemModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['client'] = this.client;
     data['description'] = this.description;
     data['problem'] = this.problem;
@@ -24,22 +28,3 @@ class ProblemModel {
 }
 
 
-
-class ProblemModel2 {
-  String? client;
-  String? description;
-
-  ProblemModel2({this.client, this.description});
-
-  ProblemModel2.fromJson(Map<String, dynamic> json) {
-    client = json['client'];
-    description = json['description'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['client'] = this.client;
-    data['description'] = this.description;
-    return data;
-  }
-}

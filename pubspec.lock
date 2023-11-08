@@ -261,6 +261,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sliver_stream_builder:
+    dependency: "direct main"
+    description:
+      name: sliver_stream_builder
+      sha256: "7cc6186420681e016d0080d88511a0db38f01e4cac7e13910bf8fa3cd892c468"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   sliver_tools:
     dependency: "direct main"
     description:
