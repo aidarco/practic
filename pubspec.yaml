@@ -41,6 +41,7 @@ dependencies:
   cloud_firestore: ^4.12.2
   sliver_tools: ^0.2.12
   sliver_stream_builder: ^0.4.0
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

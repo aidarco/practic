@@ -41,15 +41,44 @@ class FireBaseAuthServices {
     return problems;
   }
 
-
   removeFromDB(String id) async {
-
-
     print("Deleting document with ID: $id");
     await firestore.collection("problems").doc(id).delete();
-
   }
 
-}
+  Future<void> updateDocument(
+      {required String client,
+      required String problem,
+      required String description,
+      required String type,
+      required String id}) async {
+    try {
+      final model = ProblemModel(
+          client: client,
+          problem: problem,
+          description: description,
+          type: type,
+          id: id);
+      await firestore.collection('problems').doc(id).update(model.toJson());
+      print('Документ успешно обновлен.');
+    } catch (e) {
+      print('Ошибка при обновлении документа: $e');
+    }
+  }
 
 
+
+
+  Stream<List<ProblemModel>> searchProblem(String searchString) {
+
+
+    final problems = firestore.collection("problems").orderBy("client").startAt([searchString]).endAt([searchString + "\uf8ff"]).snapshots().map(
+          (snapshot) => snapshot.docs
+          .map((e) => ProblemModel.fromJson(e.data()))
+          .toList(),
+    );
+
+
+
+    return problems;
+  }}

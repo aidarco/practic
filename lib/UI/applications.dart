@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:practic/services/firebase_auth_services.dart';
+
+import 'edit_problem.dart';
 
 class Apl extends StatefulWidget {
   const Apl({super.key});
@@ -8,6 +11,7 @@ class Apl extends StatefulWidget {
   State<Apl> createState() => _AplState();
 }
 
+var searchController = "";
 
 class _AplState extends State<Apl> {
   @override
@@ -16,11 +20,25 @@ class _AplState extends State<Apl> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey.shade900,
       body: StreamBuilder(
-          stream: FireBaseAuthServices().getProblems(),
+          stream: (searchController.isEmpty)
+              ? FireBaseAuthServices().getProblems()
+              : FireBaseAuthServices().searchProblem(searchController),
           builder: (context, snapshot) {
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
+                  snap: true,
+                  floating: true,
+                  bottom: PreferredSize(
+                    preferredSize: Size.fromHeight(70),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchController = value;
+                        });
+                      },
+                    ),
+                  ),
                   title: const Text(
                     "Поиск",
                     style: TextStyle(
@@ -59,7 +77,7 @@ class _AplState extends State<Apl> {
                             description: snapshot.data![index].problem ?? "",
                             problem: snapshot.data![index].description ?? "",
                             type: snapshot.data![index].type ?? "",
-                          ))
+                          )),
               ],
             );
           }),
@@ -69,12 +87,13 @@ class _AplState extends State<Apl> {
 
 class AplWidget extends StatelessWidget {
   const AplWidget(
-      { super.key,
-        required this.id,
-        required this.client,
-        required this.description,
-        required this.problem,
-        required this.type });
+      {super.key,
+      required this.id,
+      required this.client,
+      required this.description,
+      required this.problem,
+      required this.type});
+
   final String id;
   final String client;
   final String description;
@@ -104,36 +123,45 @@ class AplWidget extends StatelessWidget {
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16))),
             ),
-            Column(
-              children: [
-                Text(
-                  client,
-                  style: const TextStyle(fontSize: 24, color: Colors.white),
-                ),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
+            GestureDetector(
+              onTap: () {
+                Get.to(() => EditProblem(), arguments: {
+                  "id": id,
+                  "client": client,
+                  "description": description,
+                  "problem": problem,
+                  "type": type,
+                });
+              },
+              child: Column(
+                children: [
+                  Text(
+                    client,
+                    style: const TextStyle(fontSize: 24, color: Colors.white),
                   ),
-                ),
-
-                Text(
-                  problem,
-                  style: const TextStyle(fontSize: 14, color: Colors.white70),
-                ),
-                Text(
-                  type,
-                  style: const TextStyle(fontSize: 12, color: Colors.white60),
-                ),
-              ],
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    problem,
+                    style: const TextStyle(fontSize: 14, color: Colors.white70),
+                  ),
+                  Text(
+                    type,
+                    style: const TextStyle(fontSize: 12, color: Colors.white60),
+                  ),
+                ],
+              ),
             ),
             GestureDetector(
               onTap: () {
-               FireBaseAuthServices().removeFromDB(id);
-               print(id);
+                FireBaseAuthServices().removeFromDB(id);
+                print(id);
               },
-
               child: Container(
                 width: double.infinity,
                 height: 36,
