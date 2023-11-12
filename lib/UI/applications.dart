@@ -12,7 +12,7 @@ class Apl extends StatefulWidget {
 }
 
 var searchController = "";
-
+var selected;
 class _AplState extends State<Apl> {
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class _AplState extends State<Apl> {
       body: StreamBuilder(
           stream: (searchController.isEmpty)
               ? FireBaseAuthServices().getProblems()
-              : FireBaseAuthServices().searchProblem(searchController),
+              : FireBaseAuthServices().searchProblem(searchController, selected ?? 1),
           builder: (context, snapshot) {
             return CustomScrollView(
               slivers: [
@@ -30,13 +30,28 @@ class _AplState extends State<Apl> {
                   snap: true,
                   floating: true,
                   bottom: PreferredSize(
-                    preferredSize: Size.fromHeight(70),
-                    child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          searchController = value;
-                        });
-                      },
+                    preferredSize: Size.fromHeight(50),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          hintStyle: TextStyle(color: Colors.grey.shade600),
+                          filled: true,
+                          fillColor: Colors.grey.shade900,
+                          focusedBorder: UnderlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Colors.white)),
+                        ),
+                        style: TextStyle(color: Colors.grey.shade300),
+                        onChanged: (value) {
+                          setState(() {
+                            searchController = value;
+                          });
+                        },
+                      ),
                     ),
                   ),
                   title: const Text(
@@ -52,6 +67,66 @@ class _AplState extends State<Apl> {
                     child: SizedBox(
                   height: 12,
                 )),
+                SliverToBoxAdapter(
+                  child: Row(
+                    children: [
+                      SizedBox(
+                          width: 135,
+                          child: RadioListTile(
+                              activeColor: Colors.white,
+
+                              value: 1,
+                              groupValue: selected,
+                              title: const Text(
+                                "name",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onChanged: (value) {
+
+                                setState(() {
+                                  selected = 1;
+
+                                });
+
+                              })),
+                      SizedBox(
+                          width: 135,
+                          child: RadioListTile(
+                              activeColor: Colors.white,
+
+                              value: 2,
+                              groupValue: selected,
+                              title: const Text(
+                                "problem",
+                                style: TextStyle(color: Colors.white, fontSize: 12),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  selected = 2;
+
+                                });
+                              })),
+                      SizedBox(
+                          width: 135,
+                          child: RadioListTile(
+                            activeColor: Colors.white,
+                              value: 3,
+                              groupValue: selected,
+                              title: const Text(
+                                "type",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onChanged: (value) {
+
+                                setState(() {
+                                  selected = 3;
+
+                                });
+
+                              })),
+                    ],
+                  ),
+                ),
                 SliverToBoxAdapter(
                     child: TextButton(
                         onPressed: () {
@@ -138,21 +213,25 @@ class AplWidget extends StatelessWidget {
                   Text(
                     client,
                     style: const TextStyle(fontSize: 24, color: Colors.white),
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     description,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 20,
                       color: Colors.white,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Text(
                     problem,
-                    style: const TextStyle(fontSize: 14, color: Colors.white70),
+                    style: const TextStyle(fontSize: 20, color: Colors.white70),
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     type,
-                    style: const TextStyle(fontSize: 12, color: Colors.white60),
+                    style: const TextStyle(fontSize: 20, color: Colors.white60),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

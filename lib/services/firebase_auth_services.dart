@@ -66,19 +66,39 @@ class FireBaseAuthServices {
     }
   }
 
+  Stream<List<ProblemModel>> searchProblem(String searchString, int type) {
 
 
+    var searchIndicator = "";
 
-  Stream<List<ProblemModel>> searchProblem(String searchString) {
+
+    if (type == 1)
+      {
+        searchIndicator = "client";
+      }
 
 
-    final problems = firestore.collection("problems").orderBy("client").startAt([searchString]).endAt([searchString + "\uf8ff"]).snapshots().map(
+    if (type == 2)
+    {
+      searchIndicator = "problem";
+    }
+
+    if (type == 3)
+    {
+      searchIndicator = "type";
+    }
+    final problems = firestore
+        .collection("problems")
+        .orderBy(searchIndicator)
+        .startAt([searchString])
+        .endAt([searchString + "\uf8ff"])
+        .snapshots()
+        .map(
           (snapshot) => snapshot.docs
-          .map((e) => ProblemModel.fromJson(e.data()))
-          .toList(),
-    );
-
-
+              .map((e) => ProblemModel.fromJson(e.data()))
+              .toList(),
+        );
 
     return problems;
-  }}
+  }
+}
